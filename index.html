@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text To Speech Converter</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            
+        }
+
+        .container {
+            margin: 2% auto;
+            position: relative;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        h1 {
+            color: #3498db;
+            text-align: center;
+            margin-top: 0;
+            font-size: 2rem;
+            animation: slideIn 1s ease-out;
+        }
+
+        textarea {
+            width: calc(100% - 30px);
+            height: 200px;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            margin: 20px auto;
+            border: none;
+            border-radius: 10px;
+            background-color: #34495e;
+            color: #ecf0f1;
+            resize: none;
+            transition: background-color 0.3s ease;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        textarea:hover {
+            background-color: #2c3e50;
+        }
+
+        div {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        select, button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            margin: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        select {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        select:hover {
+            background-color: #2980b9;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text To Speech Converter</h1>
+        <textarea placeholder="Write anything here..."></textarea>
+        <div>
+            <select></select>
+            <button>Listen</button>
+        </div>
+    </div>
+    <script>
+        let speech = new SpeechSynthesisUtterance();
+        let voices = [];
+        let voiceSelect = document.querySelector("select");
+        
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+            speech.voice = voices[0];
+
+            voices.forEach((voice, i) => (voiceSelect.options[i] = new Option(voice.name, i)));
+        };
+
+        voiceSelect.addEventListener("change", () => {
+            speech.voice = voices[voiceSelect.value];
+        });
+
+        document.querySelector("button").addEventListener("click", () => {
+            speech.text = document.querySelector("textarea").value;
+            window.speechSynthesis.speak(speech);
+        });
+    </script>
+</body>
+</html>
